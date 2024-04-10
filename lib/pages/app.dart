@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uloginazure/models/auth_service_model.dart';
 import 'package:uloginazure/models/auth_storage_model.dart';
@@ -11,7 +10,7 @@ import 'package:uloginazure/utils/helpers.dart';
 class MyApp extends StatefulWidget {
   final Widget initialPage;
 
-  const MyApp({Key? key, required this.initialPage}) : super(key: key);
+  const MyApp({super.key, required this.initialPage});
 
   @override
   _MyAppState createState() => _MyAppState();

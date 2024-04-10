@@ -147,11 +147,11 @@ class UserProfileField extends StatelessWidget {
   final IconData icon;
 
   const UserProfileField({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
