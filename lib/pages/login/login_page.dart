@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'E sistema de reservas de la UTB que facilita la gestión de espacios y recursos para la comunidad universitaria.',
+                    'El sistema de reservas de la UTB que facilita la gestión de espacios y recursos para la comunidad universitaria.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -73,7 +73,6 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const NavigationPage()),
                           );
                         } else {
-                          // En caso en el que no se pueda adquirir un token redirigue a la login page
                           MaterialPageRoute(
                               builder: (context) => const LoginPage());
                         }

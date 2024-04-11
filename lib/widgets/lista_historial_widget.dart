@@ -9,8 +9,10 @@ class ListaHistorial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyleTitle =
-        TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold);
+    const textStyleTitle = TextStyle(
+      fontSize: 13.0,
+      fontWeight: FontWeight.bold,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -22,7 +24,7 @@ class ListaHistorial extends StatelessWidget {
           listaEvento.aula,
           style: const TextStyle(fontSize: 11.0),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: 5.0),
         const Divider(
           height: 2.0,
           color: colorGris,

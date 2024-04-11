@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uloginazure/models/auth_service_model.dart';
+import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/utils/helpers.dart';
 import 'package:uloginazure/widgets/appbar_widget.dart';
@@ -97,15 +98,12 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          // Realiza el logout llamando al método correspondiente en AuthService
           String logoutResult = await AuthService.logout();
           if (logoutResult == "Account removed") {
-            // Si el logout tiene éxito, elimina el token y los datos del perfil del usuario
             await ApiServiceHelper.deleteAllTokens();
-            // Redirige al usuario a la página de inicio
+            UserProfileProvider.instance.clearUserProfile();
             Navigator.pushReplacementNamed(context, 'login');
           } else {
-            // Si hay un error en el logout, muestra un mensaje de error
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(logoutResult),
               duration: const Duration(seconds: 3),

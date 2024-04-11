@@ -97,40 +97,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       },
                       child: const Text('Logout'),
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          // Realiza la llamada a la API para obtener la lista de tareas
-                          final todoList =
-                              await ApiService.fetchTodoList(context);
-                          // Muestra la respuesta de la API en un widget de texto
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Lista de Tareas'),
-                                content: Text(todoList
-                                    .toString()), // Aquí se muestra la respuesta de la API
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Cerrar'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } catch (e) {
-                          if (kDebugMode) {
-                            print('Error fetching todo list: $e');
-                          }
-                          // Manejar el error si no puede acceder a la API
-                        }
-                      },
-                      child: const Text('Obtener Lista de Tareas'),
-                    ),
                   ],
                 ),
               )

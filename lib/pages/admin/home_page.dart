@@ -1,10 +1,15 @@
 import 'dart:math';
 import 'dart:core';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:flutter/widgets.dart';
 import 'package:uloginazure/models/evento_model.dart';
+import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/utils/fechas_util.dart';
+import 'package:uloginazure/utils/iniciales_util.dart';
 import 'package:uloginazure/widgets/lista_historial_widget.dart';
 import 'package:uloginazure/widgets/tarjeta_widget.dart';
 
@@ -42,10 +47,23 @@ class _HomePageState extends State<HomePage> {
     );
   });
 
+  late UserProfileProvider userProfileProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    userProfileProvider = UserProfileProvider.instance;
+    userProfileProvider.loadUserProfile(context).catchError((error) {
+      if (kDebugMode) {
+        print('Error loading user profile: $error');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(userProfileProvider.userData),
       backgroundColor: barColor,
       body: SingleChildScrollView(
         child: Stack(
@@ -65,35 +83,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _appBar() {
+  _appBar(Map<String, dynamic> userData) {
     const estiloBienvenida = TextStyle(
         fontSize: 14.0, fontWeight: FontWeight.bold, color: colorBeige);
 
     const estiloNombre = TextStyle(
         fontSize: 16.0, fontWeight: FontWeight.bold, color: colorBlanco);
 
+    final displayName = userData['displayName'] ?? '';
+    final iniciales = obtenerIniciales(displayName);
+
+    double ancho = MediaQuery.of(context).size.width;
+
     return AppBar(
       backgroundColor: primaryColor,
       toolbarHeight: 60.0,
       leading: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          child: const CircleAvatar(
-            backgroundImage: NetworkImage(
-                "https://global.discourse-cdn.com/infiniteflight/original/4X/d/b/b/dbb59d269fb6cba4be04411e0eefa31a61c32cf4.jpeg"),
-          ),
+        child: Row(
+          children: [
+            const Spacer(),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                height: 45,
+                width: 45,
+                color: colorBlanco,
+                child: Center(
+                  child: Text(
+                    iniciales,
+                    style: const TextStyle(
+                      color: primaryColor,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+          ],
         ),
       ),
-      title: const SafeArea(
+      title: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Hola,",
               style: estiloBienvenida,
             ),
             Text(
-              "Jose Mendoza",
+              displayName,
               style: estiloNombre,
             )
           ],
@@ -106,12 +147,15 @@ class _HomePageState extends State<HomePage> {
             height: 40.0,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: colorBlanco,
+              color: primaryColor,
             ),
             child: IconButton(
-                icon: const Icon(Icons.notifications_outlined),
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  size: ancho * 0.08,
+                ),
                 onPressed: () {},
-                color: primaryColor),
+                color: colorBlanco),
           ),
         )
       ],
@@ -123,7 +167,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(8.0),
       child: DatePicker(
         DateTime.now(),
-        height: 90.0,
+        height: 135.0,
         initialSelectedDate: DateTime.now(),
         selectionColor: colorBlanco,
         selectedTextColor: primaryColor,
@@ -151,6 +195,8 @@ class _HomePageState extends State<HomePage> {
     const tamanoInkWell = TextStyle(
         fontSize: 12.0, fontWeight: FontWeight.normal, color: primaryColor);
 
+    double ancho = MediaQuery.of(context).size.width;
+
     return Container(
       margin: const EdgeInsets.all(15.0),
       child: Column(
@@ -166,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {},
                 icon: const Icon(Icons.search),
                 color: colorLetras,
-                iconSize: 22.0,
+                iconSize: ancho * 0.07,
               ),
             ],
           ),
@@ -277,7 +323,7 @@ class _HomePageState extends State<HomePage> {
       right: 0,
       child: Container(
         width: double.infinity,
-        height: 140.0,
+        height: 180.0,
         decoration: const BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.only(

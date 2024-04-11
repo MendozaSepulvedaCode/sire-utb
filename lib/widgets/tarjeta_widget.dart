@@ -63,7 +63,7 @@ class TarjetaEvento extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Container(
-                      height: 16.5,
+                      height: 20.5,
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       color: colorAmarillo,
                       child: const Text(
@@ -79,7 +79,10 @@ class TarjetaEvento extends StatelessWidget {
                   Text(
                     listaEvento.nombrePersona,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11.0,
+                    ),
                   ),
                 ],
               ),
