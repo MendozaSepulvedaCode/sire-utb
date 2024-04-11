@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'El sistema de reservas de la UTB que facilita la gestión de espacios y recursos para la comunidad universitaria.',
+                    'E sistema de reservas de la UTB que facilita la gestión de espacios y recursos para la comunidad universitaria.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
