@@ -3,44 +3,23 @@ import 'package:uloginazure/pages/admin/home_page.dart';
 import 'package:uloginazure/pages/admin/profile_page.dart';
 import 'package:uloginazure/pages/admin/settings_page.dart';
 import 'package:uloginazure/utils/colores_util.dart';
-import 'package:uloginazure/providers/user_info_provider.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({Key? key}) : super(key: key);
+  const NavigationPage({super.key});
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-  late Future<void> _userDataFuture;
   int currentIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    _userDataFuture = UserProfileProvider.instance.loadUserProfile(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _userDataFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return Scaffold(
-            backgroundColor: barColor,
-            body: _cargarPage(currentIndex),
-            bottomNavigationBar: _bottomNavigationbar(),
-          );
-        }
-      },
+    return Scaffold(
+      backgroundColor: barColor,
+      body: _cargarPage(currentIndex),
+      bottomNavigationBar: _bottomNavigationbar(),
     );
   }
 

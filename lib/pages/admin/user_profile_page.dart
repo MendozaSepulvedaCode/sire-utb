@@ -5,7 +5,7 @@ import '../../models/auth_service_model.dart';
 import '../../models/api_services_model.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({Key? key}) : super(key: key);
+  const UserProfilePage({super.key});
 
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
@@ -59,7 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                     UserProfileField(
                       label: 'Job Title',
-                      value: userData['jobTitle'],
+                      value: userData['givenName'],
                       icon: Icons.work,
                     ),
                     UserProfileField(

@@ -17,6 +17,8 @@ dependencies:
   azure_ad_authentication: ^1.0.5
   date_picker_timeline: ^1.2.5
   flutter_native_splash: ^2.3.13
+  flutter_custom_clippers: ^2.1.0
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

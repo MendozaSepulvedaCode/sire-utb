@@ -61,17 +61,20 @@ class TarjetaEvento extends StatelessWidget {
                       "${listaEvento.horaInicio.hour} am - ${listaEvento.horaFin.hour} pm"),
                   const SizedBox(height: 7.0),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(4.0),
                     child: Container(
-                      height: 20.5,
+                      height: 21.5,
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       color: colorAmarillo,
-                      child: const Text(
-                        "Pronto a iniciar",
-                        style: TextStyle(
+                      child: const Center(
+                        child: Text(
+                          "Pronto a iniciar",
+                          style: TextStyle(
                             fontSize: 10.0,
                             color: colorBlanco,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
                   ),

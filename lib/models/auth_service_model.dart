@@ -46,24 +46,32 @@ class AuthService {
     }
   }
 
+  static Future<bool> verificarToken() async {
+    String? token = await AuthStorage.getToken('GraphToken');
+    return token != null;
+  }
+
   static Future<String> logout() async {
-    AzureAdAuthentication pca =
-        await AzureAdAuthentication.createPublicClientApplication(
-            clientId: _clientId,
-            authority: _authority,
-            redirectUri: _redirectUri);
-
-    String res;
     try {
-      await pca.logout();
-      res = "Account removed";
+      // Verificar si hay un token existente
+      String? token = await AuthStorage.getToken('GraphToken');
+      if (token != null) {
+        // Si hay un token, crear la instancia de PCA y cerrar la sesión
+        AzureAdAuthentication pca =
+            await AzureAdAuthentication.createPublicClientApplication(
+                clientId: _clientId,
+                authority: _authority,
+                redirectUri: _redirectUri);
+        await pca.logout();
+        return "Account removed";
+      } else {
+        return "No account found";
+      }
     } on MsalException {
-      res = "Error signing out";
+      return "Error signing out";
     } on PlatformException catch (e) {
-      res = "some other exception ${e.toString()}";
+      return "Some other exception ${e.toString()}";
     }
-
-    return res;
   }
 
   static Future<String?> acquireTokenSilently(List<String> scopes) async {

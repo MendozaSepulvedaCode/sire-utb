@@ -1,10 +1,7 @@
 import 'dart:math';
 import 'dart:core';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
-import 'package:flutter/widgets.dart';
 import 'package:uloginazure/models/evento_model.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
@@ -47,23 +44,18 @@ class _HomePageState extends State<HomePage> {
     );
   });
 
-  late UserProfileProvider userProfileProvider;
+  late UserProfileProvider _userProfileProvider;
 
   @override
   void initState() {
     super.initState();
-    userProfileProvider = UserProfileProvider.instance;
-    userProfileProvider.loadUserProfile(context).catchError((error) {
-      if (kDebugMode) {
-        print('Error loading user profile: $error');
-      }
-    });
+    _userProfileProvider = UserProfileProvider.instance;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(userProfileProvider.userData),
+      appBar: _appBar(_userProfileProvider.userData),
       backgroundColor: barColor,
       body: SingleChildScrollView(
         child: Stack(
@@ -90,7 +82,7 @@ class _HomePageState extends State<HomePage> {
     const estiloNombre = TextStyle(
         fontSize: 16.0, fontWeight: FontWeight.bold, color: colorBlanco);
 
-    final displayName = userData['displayName'] ?? '';
+    final displayName = _userProfileProvider.displayName;
     final iniciales = obtenerIniciales(displayName);
 
     double ancho = MediaQuery.of(context).size.width;

@@ -19,7 +19,6 @@ class UserProfileProvider with ChangeNotifier {
 
   Future<void> loadUserProfile(BuildContext context) async {
     try {
-      // Cargar el perfil del usuario solo si está vacío o si se actualiza explícitamente
       if (_userData.isEmpty) {
         _userData = await ApiService.fetchUserProfile(context);
         notifyListeners();
@@ -36,4 +35,25 @@ class UserProfileProvider with ChangeNotifier {
     _userData.clear();
     notifyListeners();
   }
+
+  String getPageName() {
+    String jobTitle = _userData['jobTitle'] ?? '';
+    if (jobTitle.contains('Administrador')) {
+      return 'Administrador';
+    } else if (jobTitle.contains('Aux_Administrativo')) {
+      return 'Auxiliar';
+    } else if (jobTitle.contains('Profesor')) {
+      return 'Profesor';
+    } else if (jobTitle.contains('Estudiante')) {
+      return 'Estudiante';
+    } else {
+      return 'Desconocido';
+    }
+  }
+
+  String get displayName => _userData['displayName'] ?? '';
+  String get givenName => _userData['givenName'] ?? '';
+  String get surname => _userData['surname'] ?? '';
+  String get userPrincipalName => _userData['userPrincipalName'] ?? '';
+  String get id => _userData['id'] ?? '';
 }

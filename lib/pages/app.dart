@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:uloginazure/models/auth_service_model.dart';
 import 'package:uloginazure/models/auth_storage_model.dart';
-import 'package:uloginazure/pages/admin/navigation_page.dart';
+import 'package:uloginazure/pages/inital_route_page.dart';
 import 'package:uloginazure/pages/login/login_page.dart';
 import 'package:uloginazure/routes/routes.dart';
 import 'package:uloginazure/utils/helpers.dart';
@@ -68,22 +68,23 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Reservas UTB',
+      title: 'SiRe UTB',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromRGBO(0, 103, 184, 1)),
+          seedColor: const Color.fromRGBO(0, 103, 184, 1),
+        ),
         useMaterial3: true,
       ),
-      home: widget.initialPage,
+      home: const InitialRoute(),
       routes: getRoutes(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case 'login':
             return MaterialPageRoute(builder: (context) => const LoginPage());
-          case 'navigation':
+          case 'initial':
             return MaterialPageRoute(
-                builder: (context) => const NavigationPage());
+                builder: (context) => const InitialRoute());
           default:
             // Si la ruta no se encuentra, regresa a página a una ruta predeterminada
             return MaterialPageRoute(builder: (context) => const LoginPage());
