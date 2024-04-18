@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:uloginazure/models/auth_service_model.dart';
 import 'package:uloginazure/models/auth_storage_model.dart';
-import 'package:uloginazure/pages/inital_route_page.dart';
+import 'package:uloginazure/routes/inital_route.dart';
 import 'package:uloginazure/pages/login/login_page.dart';
 import 'package:uloginazure/routes/routes.dart';
 import 'package:uloginazure/utils/helpers.dart';

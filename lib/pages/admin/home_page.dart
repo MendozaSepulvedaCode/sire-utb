@@ -6,8 +6,8 @@ import 'package:uloginazure/models/evento_model.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/utils/fechas_util.dart';
-import 'package:uloginazure/utils/iniciales_util.dart';
 import 'package:uloginazure/widgets/lista_historial_widget.dart';
+import 'package:uloginazure/widgets/principal_appbar_widget.dart';
 import 'package:uloginazure/widgets/tarjeta_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,7 +55,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(_userProfileProvider.userData),
+      appBar: AppbarPrincipal(
+        userData: _userProfileProvider.userData,
+      ),
       backgroundColor: barColor,
       body: SingleChildScrollView(
         child: Stack(
@@ -72,85 +74,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  _appBar(Map<String, dynamic> userData) {
-    const estiloBienvenida = TextStyle(
-        fontSize: 14.0, fontWeight: FontWeight.bold, color: colorBeige);
-
-    const estiloNombre = TextStyle(
-        fontSize: 16.0, fontWeight: FontWeight.bold, color: colorBlanco);
-
-    final displayName = _userProfileProvider.displayName;
-    final iniciales = obtenerIniciales(displayName);
-
-    double ancho = MediaQuery.of(context).size.width;
-
-    return AppBar(
-      backgroundColor: primaryColor,
-      toolbarHeight: 60.0,
-      leading: SafeArea(
-        child: Row(
-          children: [
-            const Spacer(),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                height: 45,
-                width: 45,
-                color: colorBlanco,
-                child: Center(
-                  child: Text(
-                    iniciales,
-                    style: const TextStyle(
-                      color: primaryColor,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const Spacer(),
-          ],
-        ),
-      ),
-      title: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Hola,",
-              style: estiloBienvenida,
-            ),
-            Text(
-              displayName,
-              style: estiloNombre,
-            )
-          ],
-        ),
-      ),
-      actions: [
-        SafeArea(
-          child: Container(
-            margin: const EdgeInsets.only(right: 10.0),
-            height: 40.0,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: primaryColor,
-            ),
-            child: IconButton(
-                icon: Icon(
-                  Icons.notifications_outlined,
-                  size: ancho * 0.08,
-                ),
-                onPressed: () {},
-                color: colorBlanco),
-          ),
-        )
-      ],
     );
   }
 

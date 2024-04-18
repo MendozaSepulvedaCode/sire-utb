@@ -9,12 +9,12 @@ class ContactoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: barColor,
       appBar: AppBar(
-        backgroundColor: barColor,
+        backgroundColor: primaryColor,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close),
           iconSize: 22.0,
-          color: colorLetras,
+          color: colorBlanco,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -23,14 +23,23 @@ class ContactoPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(15.0),
-          height: 550.0,
+          color: primaryColor,
+          height: MediaQuery.of(context).size.height * 0.9,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.local_post_office,
                 size: 130.0,
-                color: primaryColor,
+                color: colorBlanco,
+              ),
+              const Text(
+                "Si tienes alguna peticion, queja  o reclamo por favor dejanos un mensaje aqui.",
+                style: TextStyle(
+                  color: colorBlanco,
+                  fontSize: 13.0,
+                ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30.0),
               TextField(
@@ -38,10 +47,10 @@ class ContactoPage extends StatelessWidget {
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                      vertical: 25.0, horizontal: 25.0),
+                      vertical: 50.0, horizontal: 25.0),
                   hintText: "Mensaje...",
                   filled: true,
                   fillColor: colorBlanco,
@@ -51,20 +60,23 @@ class ContactoPage extends StatelessWidget {
                       fontSize: 15.0),
                 ),
               ),
-              const SizedBox(height: 40.0),
+              const SizedBox(height: 60.0),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
+                    backgroundColor: colorBlanco,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   onPressed: () {},
                   child: const Text(
                     "Enviar",
-                    style: TextStyle(color: colorBlanco, fontSize: 16.0),
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

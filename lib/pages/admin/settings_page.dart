@@ -111,8 +111,8 @@ class SettingsPage extends StatelessWidget {
           }
         },
         child: const Text(
-          "Salir",
-          style: TextStyle(color: colorBlanco, fontSize: 17.0),
+          "Cerrar Sesion",
+          style: TextStyle(color: colorBlanco, fontSize: 15.0),
         ),
       ),
     );

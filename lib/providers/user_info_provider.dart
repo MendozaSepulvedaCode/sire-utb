@@ -30,7 +30,6 @@ class UserProfileProvider with ChangeNotifier {
     }
   }
 
-  // Método para limpiar los datos del usuario (llamado al cerrar sesión)
   void clearUserProfile() {
     _userData.clear();
     notifyListeners();
