@@ -10,7 +10,9 @@ String getDay(DateTime fecha) {
     'Domingo'
   ];
 
-  return nombreDias[diaDeSemana - 1];
+  int numeroDia = fecha.day;
+
+  return '$numeroDia ${nombreDias[diaDeSemana - 1]}';
 }
 
 String getMonth(DateTime fecha) {

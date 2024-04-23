@@ -1,12 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uloginazure/models/auxiliar_model.dart';
 import 'package:uloginazure/utils/colores_util.dart';
+import 'package:uloginazure/utils/fechas_util.dart';
 
-class AsignarAux extends StatelessWidget {
+class AsignarAux extends StatefulWidget {
   const AsignarAux({super.key});
 
+  @override
+  State<AsignarAux> createState() => _AsignarAuxState();
+}
+
+class _AsignarAuxState extends State<AsignarAux> {
+  DateTime _diaSeleccionado = DateTime.now();
+  TimeOfDay selectedStartTime = TimeOfDay.now();
+  TimeOfDay selectedEndTime = TimeOfDay.now();
   @override
   Widget build(BuildContext context) {
     final Auxiliar auxiliar =
@@ -48,6 +56,7 @@ class AsignarAux extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _profileContent(context, auxiliar),
+            _infoAux(context, auxiliar),
             _asignarAux(context, auxiliar),
             _botonAsignar(),
           ],
@@ -88,13 +97,13 @@ class AsignarAux extends StatelessWidget {
     );
   }
 
-  _asignarAux(BuildContext context, Auxiliar auxiliar) {
+  _infoAux(BuildContext context, Auxiliar auxiliar) {
     const estiloNumeros = TextStyle(
         fontSize: 15.0, fontWeight: FontWeight.bold, color: colorLetras);
     const estiloLetras = TextStyle(
         fontSize: 12.0, fontWeight: FontWeight.normal, color: colorGris);
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.43,
+      height: MediaQuery.of(context).size.height * 0.1,
       child: Column(
         children: [
           SizedBox(
@@ -141,6 +150,58 @@ class AsignarAux extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _asignarAux(BuildContext context, Auxiliar auxiliar) {
+    return Container(
+      color: colorBeige,
+      height: MediaQuery.of(context).size.height * 0.33,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: primaryColor),
+                child: GestureDetector(
+                  onTap: () async {
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: _diaSeleccionado,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(DateTime.now().year + 1),
+                    );
+                    if (pickedDate != null && pickedDate != _diaSeleccionado) {
+                      setState(() {
+                        _diaSeleccionado = pickedDate;
+                      });
+                    }
+                  },
+                  child: SizedBox(
+                    width: 80.0,
+                    child: Text(
+                      getDay(_diaSeleccionado),
+                      style: const TextStyle(color: colorBlanco),
+                    ),
+                  ),
+                ),
+              ),
+              const Text(
+                'Día',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ],
       ),
