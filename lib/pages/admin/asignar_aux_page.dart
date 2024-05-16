@@ -15,6 +15,14 @@ class _AsignarAuxState extends State<AsignarAux> {
   DateTime _diaSeleccionado = DateTime.now();
   TimeOfDay selectedStartTime = TimeOfDay.now();
   TimeOfDay selectedEndTime = TimeOfDay.now();
+
+  final List<String> _blockOptions = [
+    'Bloque 1',
+    'Bloque 2',
+    'Bloque 3',
+  ];
+
+  String _selectedBlock = 'Bloque 1';
   @override
   Widget build(BuildContext context) {
     final Auxiliar auxiliar =
@@ -157,8 +165,7 @@ class _AsignarAuxState extends State<AsignarAux> {
   }
 
   _asignarAux(BuildContext context, Auxiliar auxiliar) {
-    return Container(
-      color: colorBeige,
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.33,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -196,6 +203,44 @@ class _AsignarAuxState extends State<AsignarAux> {
               ),
               const Text(
                 'Día',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: primaryColor,
+                ),
+                child: DropdownButton(
+                  value: _selectedBlock,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedBlock = newValue!;
+                    });
+                  },
+                  items: _blockOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: colorBlanco),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Bloque:',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

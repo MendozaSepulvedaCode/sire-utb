@@ -11,15 +11,12 @@ class ApiService {
     try {
       String token = await ApiServiceHelper.getValidToken(
           'GraphToken',
-          [
-            "https://graph.microsoft.com/User.Read",
-            "https://graph.microsoft.com/User.Read.All"
-          ],
+          ['api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso'],
           context);
 
       // Obtener el perfil del usuario desde la API
       final response = await http.get(
-        Uri.parse('https://graph.microsoft.com/v1.0/me'),
+        Uri.parse('https://sire-utb-x2ifq.ondigitalocean.app/form/materia'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -36,30 +33,49 @@ class ApiService {
     }
   }
 
-  static Future<Map<String, dynamic>> fetchTodoList(
-      BuildContext context) async {
+  static Future<List<T>> fetchTodoList<T>(
+    BuildContext context, {
+    required String url,
+    required String method,
+    Map<String, dynamic>? body,
+    required T Function(Map<String, dynamic>) fromJson,
+  }) async {
     try {
       String token = await ApiServiceHelper.getValidToken(
-          "todoListToken",
-          [
-            "api://cc30dbee-cc7a-421e-845c-80c1ee92db0b/Todolist.ReadWrite",
-            "api://cc30dbee-cc7a-421e-845c-80c1ee92db0b/Todolist.Read",
-          ],
-          context);
-
-      final response = await http.get(
-        Uri.parse('http://192.168.1.13:5000/api/todolist'),
-        headers: {'Authorization': 'Bearer $token'},
+        "todoListToken",
+        ['api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso'],
+        context,
       );
 
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
+      late http.Response response;
+      if (method.toLowerCase() == 'post') {
+        if (body == null) {
+          throw ArgumentError('Body must not be null for POST method');
+        }
+        response = await http.post(
+          Uri.parse(url),
+          headers: {'Authorization': 'Bearer $token'},
+          body: json.encode(body),
+        );
       } else {
-        log("Failed to fetch todo list");
-        throw Exception('Failed to fetch todo list');
+        response = await http.get(
+          Uri.parse(url),
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      }
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = json.decode(response.body);
+        log(response.body);
+        List<T> items = [];
+        for (var json in jsonList) {
+          items.add(fromJson(json));
+        }
+        return items;
+      } else {
+        throw Exception('Failed to fetch data');
       }
     } catch (e) {
-      log('Error: $e');
       throw Exception('Error: $e');
     }
   }

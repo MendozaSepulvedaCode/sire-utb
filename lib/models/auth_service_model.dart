@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:azure_ad_authentication/azure_ad_authentication.dart';
 import 'package:azure_ad_authentication/exeption.dart';
 import 'package:azure_ad_authentication/model/user_ad.dart';
@@ -15,8 +14,7 @@ class AuthService {
       "msauth://com.sire.uloginazure/iZsW88Tv9Q8xrgpgnmL1Pq0HpwM%3D";
   static const String _clientId = "82fb3fd0-776e-47e6-9527-5712cd89b6fe";
   static const List<String> _scopes = [
-    "https://graph.microsoft.com/User.Read",
-    "https://graph.microsoft.com/User.Read.All"
+    "api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso"
   ];
 
   static Future<String> acquireToken() async {
@@ -80,7 +78,6 @@ class AuthService {
           await AzureAdAuthentication.createPublicClientApplication(
         clientId: _clientId,
         authority: _authority,
-        //redirectUri: _redirectUri,
       );
 
       UserAdModel? userAdModel = await pca.acquireTokenSilent(scopes: scopes);

@@ -1,7 +1,7 @@
 name: uloginazure
 description: "App reservas UTB"
 
-publish_to: "none" #
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -19,6 +19,9 @@ dependencies:
   flutter_native_splash: ^2.3.13
   flutter_custom_clippers: ^2.1.0
   provider: ^5.0.0
+  easy_stepper: ^0.8.3
+  dio: ^5.0.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:

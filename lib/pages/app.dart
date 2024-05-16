@@ -40,20 +40,14 @@ class _MyAppState extends State<MyApp> {
         if (token != null) {
           bool tokenValid = await AuthService.isTokenValid(token);
           if (tokenValid) {
-            //Adquisicion de token de manera silenciosa
-            await AuthService.acquireTokenSilently([
-              "https://graph.microsoft.com/User.Read",
-              "https://graph.microsoft.com/User.Read.All"
-            ]);
+            await AuthService.acquireTokenSilently(
+                ["api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso"]);
           } else {
-            // Si el token expira manda al login
             String logoutResult = await AuthService.logout();
             if (logoutResult == "Account removed") {
               await ApiServiceHelper.deleteAllTokens();
-              // Redirige al usuario a la página de inicio
               Navigator.pushReplacementNamed(context, 'login');
             } else {
-              // Si hay un error en el logout, muestra un mensaje de error
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(logoutResult),
                 duration: const Duration(seconds: 3),

@@ -18,7 +18,7 @@ class _PrincipalAuxState extends State<PrincipalAux> {
     return Scaffold(
       backgroundColor: barColor,
       appBar: AppbarPrincipal(
-        userData: _userProfileProvider.userData,
+        userData: _userProfileProvider.decodedToken,
       ),
       body: const Center(
         child: Text("Auxiliar"),

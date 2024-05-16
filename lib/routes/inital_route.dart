@@ -10,7 +10,7 @@ import 'package:uloginazure/pages/profesores/home_prf_page.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 
 class InitialRoute extends StatefulWidget {
-  const InitialRoute({super.key});
+  const InitialRoute({Key? key}) : super(key: key);
 
   @override
   _InitialRouteState createState() => _InitialRouteState();
@@ -28,12 +28,14 @@ class _InitialRouteState extends State<InitialRoute> {
   Future<void> _loadUserProfile() async {
     try {
       await UserProfileProvider.instance.loadUserProfile(context);
-      _userRole = UserProfileProvider.instance.getPageName();
       String? token = await AuthStorage.getToken('GraphToken');
       if (token == null || !(await AuthService.isTokenValid(token))) {
         _navigateToLoginPage();
       } else {
-        _navigateToHomePage(_userRole);
+        if (UserProfileProvider.instance.userData.isNotEmpty) {
+          _userRole = UserProfileProvider.instance.getUserRole ?? '';
+          _navigateToHomePage(_userRole);
+        }
       }
     } catch (e) {
       if (kDebugMode) {
@@ -50,7 +52,7 @@ class _InitialRouteState extends State<InitialRoute> {
           MaterialPageRoute(builder: (context) => const NavigationPage()),
         );
         break;
-      case 'Auxiliar':
+      case 'Aux_Administrativo':
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeAux()),
         );

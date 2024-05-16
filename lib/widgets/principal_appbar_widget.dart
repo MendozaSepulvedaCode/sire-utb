@@ -18,7 +18,7 @@ class AppbarPrincipal extends StatelessWidget implements PreferredSizeWidget {
     const estiloNombre = TextStyle(
         fontSize: 16.0, fontWeight: FontWeight.bold, color: colorBlanco);
 
-    final displayName = userData['displayName'] ?? '';
+    final displayName = userData['name'] ?? '';
     final iniciales = obtenerIniciales(displayName);
 
     double ancho = MediaQuery.of(context).size.width;
@@ -34,8 +34,8 @@ class AppbarPrincipal extends StatelessWidget implements PreferredSizeWidget {
               borderRadius: BorderRadius.circular(25.0),
               child: Container(
                 padding: const EdgeInsets.all(8.0),
-                height: 38,
-                width: 38,
+                height: 40,
+                width: 40,
                 color: colorBlanco,
                 child: Center(
                   child: Text(

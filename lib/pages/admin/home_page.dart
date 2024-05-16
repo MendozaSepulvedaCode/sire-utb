@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarPrincipal(
-        userData: _userProfileProvider.userData,
+        userData: _userProfileProvider.decodedToken,
       ),
       backgroundColor: barColor,
       body: SingleChildScrollView(
