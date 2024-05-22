@@ -1,70 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:uloginazure/models/api_services_model.dart';
-import 'package:uloginazure/models/evento_model.dart';
 import 'package:uloginazure/models/profesor_model.dart';
+import 'package:uloginazure/providers/profesor_provider.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/widgets/principal_appbar_widget.dart';
-import 'package:uloginazure/widgets/steps_widget.dart';
-import 'package:uloginazure/widgets/tarjeta_profesor_widget.dart';
+import 'package:uloginazure/widgets/profesor/step_aforo_widget.dart';
+import 'package:uloginazure/widgets/profesor/tarjeta_profesor_widget.dart';
+import 'package:uloginazure/widgets/vacio_widget.dart';
 
 class PrincipalPrf extends StatefulWidget {
-  const PrincipalPrf({super.key});
+  final List<Profesor> reservas;
+  final List<Aforo> aforo;
+
+  const PrincipalPrf({super.key, required this.reservas, required this.aforo});
 
   @override
   State<PrincipalPrf> createState() => _PrincipalPrfState();
 }
 
 class _PrincipalPrfState extends State<PrincipalPrf> {
-  List<Profesor> _listaProfesores = [];
-  bool _isLoading = true;
-
   final UserProfileProvider _userProfileProvider = UserProfileProvider.instance;
+  final ProfesorProvider _profesorProvider = ProfesorProvider();
 
   final _pageController = PageController(
     initialPage: 0,
     viewportFraction: 0.5,
   );
 
-  final List<Evento> listaEventos = List.generate(10, (index) {
-    return Evento(
-      id: index + 1,
-      icono: Icons.event,
-      aula: 'A2 - 502',
-      horaInicio: DateTime(2024, 04, 06, 11, 30),
-      horaFin: DateTime(2024, 04, 06, 12, 30),
-      nombrePersona: "Jose Mendoza $index",
-      descripcionEvento:
-          "Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo ",
-      fechaReserva: DateTime(2024, 04, 06, 12, 30),
-    );
-  });
-
   @override
   void initState() {
     super.initState();
-    _fetchTodoList();
-  }
-
-  Future<void> _fetchTodoList() async {
-    try {
-      final todoList = await ApiService.fetchTodoList<Profesor>(
-        context,
-        url: 'https://coral-app-up4fv.ondigitalocean.app/profe/reserva_profe',
-        method: 'get',
-        fromJson: (json) => Profesor.fromJson(json),
-      );
-
-      setState(() {
-        _listaProfesores = todoList;
-        _isLoading = false;
-      });
-    } catch (e) {
-      print('Error fetching todo list: $e');
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    _profesorProvider.getReservasAprobar(context);
+    _profesorProvider.getAforo(context);
   }
 
   @override
@@ -102,9 +69,7 @@ class _PrincipalPrfState extends State<PrincipalPrf> {
           const SizedBox(
             height: 12.0,
           ),
-          _isLoading
-              ? const CircularProgressIndicator()
-              : _infoReservas(context),
+          _infoReservas(_profesorProvider.profesorStream),
           const SizedBox(
             height: 15.0,
           ),
@@ -119,25 +84,44 @@ class _PrincipalPrfState extends State<PrincipalPrf> {
           const SizedBox(
             height: 10.0,
           ),
-          _reservasPendientes(),
+          _reservasPendientes(_profesorProvider.aforoStream),
         ],
       ),
     );
   }
 
-  _infoReservas(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    return SizedBox(
-      height: screenSize.height * 0.21,
-      child: PageView.builder(
-        controller: _pageController,
-        itemCount: _listaProfesores.length,
-        itemBuilder: (BuildContext context, index) {
-          return _eventoTarjeta(context, _listaProfesores[index]);
-        },
-        physics: const BouncingScrollPhysics(),
-        padEnds: false,
-      ),
+  _infoReservas(Stream<List<Profesor>> reservasStream) {
+    return StreamBuilder<List<Profesor>>(
+      stream: reservasStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final List<Profesor> reservas = snapshot.data ?? [];
+          if (reservas.isEmpty) {
+            return const VacioWidget();
+          } else {
+            final screenSize = MediaQuery.of(context).size;
+            return SizedBox(
+              height: screenSize.height * 0.22,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: reservas.length,
+                itemBuilder: (BuildContext context, index) {
+                  return _eventoTarjeta(context, reservas[index]);
+                },
+                physics: const BouncingScrollPhysics(),
+                padEnds: false,
+              ),
+            );
+          }
+        }
+      },
     );
   }
 
@@ -145,19 +129,40 @@ class _PrincipalPrfState extends State<PrincipalPrf> {
     return GestureDetector(
       child: TarjetaProfesor(profesor: profesor),
       onTap: () {
-        Navigator.pushNamed(context, 'event', arguments: profesor);
+        Navigator.pushNamed(context, 'profesores/accion', arguments: profesor);
       },
     );
   }
 
-  _reservasPendientes() {
-    return Column(
-      children: listaEventos.map((evento) {
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Steps(evento),
-        );
-      }).toList(),
+  Widget _reservasPendientes(Stream<List<Aforo>> aforoStream) {
+    return StreamBuilder<List<Aforo>>(
+      stream: aforoStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final List<Aforo> aforo = snapshot.data ?? [];
+          if (aforo.isEmpty) {
+            return const VacioWidget();
+          } else {
+            return Column(
+              children: aforo
+                  .where((aforo) => aforo.estado != "Finalizada")
+                  .map((aforo) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: StepsAforo(aforo),
+                );
+              }).toList(),
+            );
+          }
+        }
+      },
     );
   }
 }

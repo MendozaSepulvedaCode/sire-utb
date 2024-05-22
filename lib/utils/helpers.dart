@@ -45,11 +45,8 @@ class ApiServiceHelper {
   static Future<void> clearTokensAndRedirectToLogin(
       BuildContext context) async {
     try {
-      // Borrar todos los tokens almacenados
       await deleteAllTokens();
-      // Redirigir al usuario a la página de inicio de sesión
-      Navigator.pushReplacementNamed(
-          context, 'login'); // Ajusta la ruta según sea necesario
+      Navigator.pushReplacementNamed(context, 'login');
     } catch (e) {
       throw Exception('Error al borrar los tokens y redirigir al usuario: $e');
     }

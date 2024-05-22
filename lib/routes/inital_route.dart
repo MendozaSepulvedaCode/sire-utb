@@ -10,7 +10,7 @@ import 'package:uloginazure/pages/profesores/home_prf_page.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 
 class InitialRoute extends StatefulWidget {
-  const InitialRoute({Key? key}) : super(key: key);
+  const InitialRoute({super.key});
 
   @override
   _InitialRouteState createState() => _InitialRouteState();

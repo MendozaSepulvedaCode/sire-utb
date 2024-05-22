@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uloginazure/models/profesor_model.dart';
 import 'package:uloginazure/pages/admin/settings_page.dart';
 import 'package:uloginazure/pages/profesores/principal_prf.dart';
+import 'package:uloginazure/providers/profesor_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 
 class HomePrf extends StatefulWidget {
@@ -12,6 +14,20 @@ class HomePrf extends StatefulWidget {
 
 class _HomePrfState extends State<HomePrf> {
   int currentIndex = 0;
+  late List<Profesor> reservas = [];
+  late List<Aforo> aforo = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarDatos();
+  }
+
+  void _cargarDatos() async {
+    reservas = await ProfesorProvider().getReservasAprobar(context);
+    aforo = await ProfesorProvider().getAforo(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +43,13 @@ class _HomePrfState extends State<HomePrf> {
   _cargarPage(int paginaActual) {
     switch (paginaActual) {
       case 0:
-        return const PrincipalPrf();
+        return PrincipalPrf(reservas: reservas, aforo: aforo);
       case 1:
-        return const PrincipalPrf();
+        return PrincipalPrf(reservas: reservas, aforo: aforo);
       case 2:
         return const SettingsPage();
-
       default:
-        return const PrincipalPrf();
+        return PrincipalPrf(reservas: reservas, aforo: aforo);
     }
   }
 
@@ -69,7 +84,7 @@ class _HomePrfState extends State<HomePrf> {
     );
   }
 
-  _iconosNavigation(IconData icono) {
+  BottomNavigationBarItem _iconosNavigation(IconData icono) {
     return BottomNavigationBarItem(
       icon: SizedBox(
         height: 6.0,

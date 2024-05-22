@@ -6,6 +6,8 @@ import 'package:uloginazure/models/auth_service_model.dart';
 import 'package:uloginazure/models/auth_storage_model.dart';
 
 class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
+
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
@@ -21,14 +23,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<void> fetchUserProfile() async {
     String? token = await AuthStorage.getToken('GraphToken');
-    print(token);
     if (token == null) {
-      // No hay token, el usuario ya ha cerrado sesión
       Navigator.pushReplacementNamed(context, '/login');
       return;
     }
 
-    // Verificar si el token es válido
     bool tokenValid = await AuthService.isTokenValid(token);
     if (!tokenValid) {
       // El token ha expirado, redirigir al usuario a la página de inicio de sesión

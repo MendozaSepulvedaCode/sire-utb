@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:uloginazure/models/evento_model.dart';
+import 'package:uloginazure/models/profesor_model.dart';
+import 'package:uloginazure/providers/profesor_provider.dart';
 import 'package:uloginazure/providers/user_info_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
+import 'package:uloginazure/widgets/estudiante/step_estudiante_widget.dart';
 import 'package:uloginazure/widgets/principal_appbar_widget.dart';
-import 'package:uloginazure/widgets/steps_widget.dart';
+import 'package:uloginazure/widgets/vacio_widget.dart';
 
 class PrincipalEst extends StatefulWidget {
-  const PrincipalEst({super.key});
+  final List<Aforo> aforo;
+  const PrincipalEst({super.key, required this.aforo});
 
   @override
   State<PrincipalEst> createState() => _PrincipalEstState();
@@ -14,20 +17,13 @@ class PrincipalEst extends StatefulWidget {
 
 class _PrincipalEstState extends State<PrincipalEst> {
   final UserProfileProvider _userProfileProvider = UserProfileProvider.instance;
+  final ProfesorProvider _profesorProvider = ProfesorProvider();
 
-  final List<Evento> listaEventos = List.generate(10, (index) {
-    return Evento(
-      id: index + 1,
-      icono: Icons.event,
-      aula: 'A2 - 502',
-      horaInicio: DateTime(2024, 04, 06, 11, 30),
-      horaFin: DateTime(2024, 04, 06, 12, 30),
-      nombrePersona: "Jose Mendoza $index",
-      descripcionEvento:
-          "Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo Quiero reservar este salon para estudiar calculo ",
-      fechaReserva: DateTime(2024, 04, 06, 12, 30),
-    );
-  });
+  @override
+  void initState() {
+    super.initState();
+    _profesorProvider.getAforo(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,20 +60,44 @@ class _PrincipalEstState extends State<PrincipalEst> {
           const SizedBox(
             height: 10.0,
           ),
-          _reservasPendientes(),
+          _reservasPendientes(_profesorProvider.aforoStream),
         ],
       ),
     );
   }
 
-  _reservasPendientes() {
-    return Column(
-      children: listaEventos.map((evento) {
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Steps(evento),
-        );
-      }).toList(),
+  _reservasPendientes(Stream<List<Aforo>> aforoStream) {
+    return StreamBuilder<List<Aforo>>(
+      stream: aforoStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final List<Aforo> aforo = snapshot.data ?? [];
+          if (aforo.isEmpty) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: const VacioWidget(),
+            );
+          } else {
+            return Column(
+              children: aforo
+                  .where((aforo) => aforo.estado != "Finalizada")
+                  .map((aforo) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: StepEst(aforo),
+                );
+              }).toList(),
+            );
+          }
+        }
+      },
     );
   }
 }

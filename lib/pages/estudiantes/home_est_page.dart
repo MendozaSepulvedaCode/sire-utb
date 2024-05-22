@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uloginazure/models/profesor_model.dart';
 import 'package:uloginazure/pages/admin/settings_page.dart';
 import 'package:uloginazure/pages/estudiantes/principal_est.dart';
+import 'package:uloginazure/providers/profesor_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 
 class HomeEst extends StatefulWidget {
@@ -12,6 +14,18 @@ class HomeEst extends StatefulWidget {
 
 class _HomeEstState extends State<HomeEst> {
   int currentIndex = 0;
+  late List<Aforo> aforo = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarDatos();
+  }
+
+  void _cargarDatos() async {
+    aforo = await ProfesorProvider().getAforo(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +41,14 @@ class _HomeEstState extends State<HomeEst> {
   _cargarPage(int paginaActual) {
     switch (paginaActual) {
       case 0:
-        return const PrincipalEst();
+        return PrincipalEst(aforo: aforo);
       case 1:
-        return const PrincipalEst();
+        return PrincipalEst(aforo: aforo);
       case 2:
         return const SettingsPage();
 
       default:
-        return const PrincipalEst();
+        return PrincipalEst(aforo: aforo);
     }
   }
 

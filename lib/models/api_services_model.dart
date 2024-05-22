@@ -14,7 +14,6 @@ class ApiService {
           ['api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso'],
           context);
 
-      // Obtener el perfil del usuario desde la API
       final response = await http.get(
         Uri.parse('https://sire-utb-x2ifq.ondigitalocean.app/form/materia'),
         headers: {'Authorization': 'Bearer $token'},
@@ -22,7 +21,6 @@ class ApiService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> userProfile = json.decode(response.body);
-        // Guardar los datos del perfil en el almacenamiento local
         await AuthStorage.saveUserProfile(userProfile);
         return userProfile;
       } else {
@@ -54,13 +52,30 @@ class ApiService {
         }
         response = await http.post(
           Uri.parse(url),
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(body),
+        );
+      } else if (method.toLowerCase() == 'patch') {
+        if (body == null) {
+          throw ArgumentError('Body must not be null for PATCH method');
+        }
+        response = await http.patch(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json'
+          },
           body: json.encode(body),
         );
       } else {
         response = await http.get(
           Uri.parse(url),
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
         );
       }
 
@@ -76,6 +91,63 @@ class ApiService {
         throw Exception('Failed to fetch data');
       }
     } catch (e) {
+      log('Error: $e');
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<T> fetchPatch<T>(
+    BuildContext context, {
+    required String url,
+    required String method,
+    Map<String, dynamic>? body,
+    required T Function(dynamic) fromJson,
+  }) async {
+    try {
+      String token = await ApiServiceHelper.getValidToken(
+        "todoListToken",
+        ['api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso'],
+        context,
+      );
+
+      late http.Response response;
+      if (method.toLowerCase() == 'patch') {
+        if (body == null) {
+          throw ArgumentError('Body must not be null for PATCH method');
+        }
+        response = await http.patch(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(body),
+        );
+      } else {
+        response = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+      }
+
+      if (response.statusCode == 200) {
+        dynamic jsonResponse = json.decode(response.body);
+        if (jsonResponse is List) {
+          List<T> items = [];
+          for (var jsonItem in jsonResponse) {
+            items.add(fromJson(jsonItem));
+          }
+          return items as T;
+        } else {
+          return fromJson(jsonResponse);
+        }
+      } else {
+        throw Exception('Failed to fetch data');
+      }
+    } catch (e) {
+      log('Error: $e');
       throw Exception('Error: $e');
     }
   }
