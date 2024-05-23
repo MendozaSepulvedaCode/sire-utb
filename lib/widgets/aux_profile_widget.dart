@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uloginazure/models/auxiliar_model.dart';
+import 'package:uloginazure/models/aux_model.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 
 class ProfileAux extends StatelessWidget {
@@ -11,7 +11,7 @@ class ProfileAux extends StatelessWidget {
   Widget build(BuildContext context) {
     late Color colorEstado;
     late String textoEstado;
-    if (auxiliar.estado == 0) {
+    if (1 == 0) {
       colorEstado = colorAmarillo;
       textoEstado = "Pendiente";
     } else {
@@ -25,14 +25,7 @@ class ProfileAux extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: Image.network(
-                  auxiliar.fotoPerfil,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: SizedBox(width: 50.0, height: 50.0, child: Text("hola")),
             ),
             const SizedBox(width: 10.0),
             Column(
@@ -41,7 +34,7 @@ class ProfileAux extends StatelessWidget {
                 SizedBox(
                   width: 180.0,
                   child: Text(
-                    auxiliar.nombreAux,
+                    "auxiliar.nombreAux,",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,

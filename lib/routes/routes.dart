@@ -5,6 +5,7 @@ import 'package:uloginazure/pages/admin/contactanos_settings.dart';
 import 'package:uloginazure/pages/admin/event_page.dart';
 import 'package:uloginazure/pages/admin/history_page.dart';
 import 'package:uloginazure/pages/admin/home_page.dart';
+import 'package:uloginazure/pages/auxiliar/reporte_aux_page.dart';
 import 'package:uloginazure/pages/profesores/reserva_page.dart';
 import 'package:uloginazure/routes/inital_route.dart';
 import 'package:uloginazure/pages/admin/navigation_page.dart';
@@ -38,5 +39,6 @@ Map<String, WidgetBuilder> getRoutes() {
 
     //Auxiliares
     'aux': (context) => const HomeAux(),
+    'aux/reporte': (context) => const ReporteAux(),
   };
 }

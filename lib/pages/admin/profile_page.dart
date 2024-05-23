@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uloginazure/models/auxiliar_model.dart';
+import 'package:uloginazure/models/aux_model.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/widgets/appbar_widget.dart';
 import 'package:uloginazure/widgets/aux_profile_widget.dart';
@@ -12,14 +12,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final List<Auxiliar> listaAuxiliares = List.generate(10, (index) {
-    return Auxiliar(
-        id: 1,
-        fotoPerfil:
-            "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Image-File.png",
-        nombreAux: "Jose Miguel Mendoza Sepulveda",
-        estado: 1);
-  });
+  final List<Auxiliar> listaAuxiliares = [];
 
   @override
   Widget build(BuildContext context) {

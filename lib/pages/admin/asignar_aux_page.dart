@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uloginazure/models/auxiliar_model.dart';
+import 'package:uloginazure/models/aux_model.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 import 'package:uloginazure/utils/fechas_util.dart';
 
@@ -75,27 +75,27 @@ class _AsignarAuxState extends State<AsignarAux> {
   _profileContent(BuildContext context, Auxiliar auxiliar) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.28,
-      child: Column(
+      child: const Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
             height: 100.0,
-            child: Image.network(auxiliar.fotoPerfil),
+            child: Text("Aqui va la foto"),
           ),
           Text(
-            auxiliar.nombreAux,
+            "Jose Mendoza",
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               color: colorLetras,
               fontSize: 16.0,
             ),
           ),
-          const Text(
+          Text(
             "Auxiliar",
             style: TextStyle(color: primaryColor),
           ),
-          const Divider(
+          Divider(
             height: 1.0,
             color: colorGris,
           ),

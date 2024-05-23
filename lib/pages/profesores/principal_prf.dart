@@ -24,7 +24,7 @@ class _PrincipalPrfState extends State<PrincipalPrf> {
 
   final _pageController = PageController(
     initialPage: 0,
-    viewportFraction: 0.5,
+    viewportFraction: 0.6,
   );
 
   @override

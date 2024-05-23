@@ -1,5 +1,14 @@
-String parseDateTime(DateTime dateTime) {
+import 'package:intl/intl.dart';
+
+String parseDateTime(dynamic dateTimeOrReserva) {
   try {
+    DateTime dateTime;
+    if (dateTimeOrReserva is DateTime) {
+      dateTime = dateTimeOrReserva;
+    } else {
+      dateTime = DateTime.parse(dateTimeOrReserva);
+    }
+
     if (dateTime.toIso8601String().endsWith("000Z")) {
       final meses = [
         'Enero',
@@ -19,14 +28,15 @@ String parseDateTime(DateTime dateTime) {
       final mesIndex = dateTime.month - 1;
       final diaMes = dateTime.day;
 
-      final horaString = dateTime.toIso8601String().substring(11, 16);
+      final horaFormatter = DateFormat.jm();
+      final horaString = horaFormatter.format(dateTime);
 
       return "$diaMes de ${meses[mesIndex]} - $horaString";
     } else {
       return dateTime.toIso8601String();
     }
   } catch (e) {
-    return dateTime.toIso8601String();
+    return "Invalid date format";
   }
 }
 

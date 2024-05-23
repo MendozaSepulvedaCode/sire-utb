@@ -123,6 +123,18 @@ class ApiService {
           },
           body: json.encode(body),
         );
+      } else if (method.toLowerCase() == 'post') {
+        if (body == null) {
+          throw ArgumentError('Body must not be null for POST method');
+        }
+        response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(body),
+        );
       } else {
         response = await http.get(
           Uri.parse(url),
@@ -142,6 +154,64 @@ class ApiService {
           return items as T;
         } else {
           return fromJson(jsonResponse);
+        }
+      } else {
+        throw Exception('Failed to fetch data');
+      }
+    } catch (e) {
+      log('Error: $e');
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<T> fetchSingleItem<T>(
+    BuildContext context, {
+    required String url,
+    required String method,
+    Map<String, dynamic>? body,
+    required T Function(dynamic) fromJson,
+  }) async {
+    try {
+      String token = await ApiServiceHelper.getValidToken(
+        "todoListToken",
+        ['api://f928ab89-bd59-4400-8477-829e0cf9cc59/reservas.acceso'],
+        context,
+      );
+
+      late http.Response response;
+      if (method.toLowerCase() == 'post') {
+        if (body == null) {
+          throw ArgumentError('Body must not be null for POST method');
+        }
+        response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(body),
+        );
+      } else {
+        response = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+      }
+
+      if (response.statusCode == 200) {
+        dynamic jsonData = json.decode(response.body);
+
+        // Si T es List, esperamos una lista de objetos
+        if (T == List) {
+          List<dynamic> jsonList = jsonData as List<dynamic>;
+          List<T> items = jsonList.map((item) => fromJson(item)).toList();
+          return items as T;
+        } else {
+          // Si T no es List, esperamos un solo objeto
+          T item = fromJson(jsonData);
+          return item;
         }
       } else {
         throw Exception('Failed to fetch data');

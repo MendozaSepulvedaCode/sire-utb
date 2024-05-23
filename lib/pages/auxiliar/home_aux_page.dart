@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uloginazure/models/aux_model.dart';
 import 'package:uloginazure/pages/admin/settings_page.dart';
 import 'package:uloginazure/pages/auxiliar/principal_aux.dart';
+import 'package:uloginazure/providers/aux_provider.dart';
 import 'package:uloginazure/utils/colores_util.dart';
 
 class HomeAux extends StatefulWidget {
@@ -12,6 +14,19 @@ class HomeAux extends StatefulWidget {
 
 class _HomeAuxState extends State<HomeAux> {
   int currentIndex = 0;
+
+  late List<Auxiliar> auxReservas = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarDatos();
+  }
+
+  void _cargarDatos() async {
+    auxReservas = await AuxProvider().getReservasAux(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +40,12 @@ class _HomeAuxState extends State<HomeAux> {
   _cargarPage(int paginaActual) {
     switch (paginaActual) {
       case 0:
-        return const PrincipalAux();
+        return PrincipalAux(auxReservas: auxReservas);
       case 1:
         return const SettingsPage();
 
       default:
-        return const PrincipalAux();
+        return PrincipalAux(auxReservas: auxReservas);
     }
   }
 
